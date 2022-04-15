@@ -1,0 +1,14 @@
+[
+  {
+  "image": "427128480243.dkr.ecr.us-east-1.amazonaws.com/sample-manning-repo:latest",
+  "name": "sample-container-image",
+  "essential": true,
+  "portMappings": [
+                {
+                    "hostPort": 5000,
+                    "containerPort": 5000,
+                    "protocol": "tcp"
+                }
+            ]
+}
+]

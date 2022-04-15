@@ -5,3 +5,7 @@ variable "namespace" {
 variable "region" {
   type = string
 }
+
+variable "repo-name" {
+  type = string
+}

@@ -1,148 +1,150 @@
 
 resource "aws_vpc" "koffee_vpc" {
-  cidr_block = "172.16.0.0/16"
+  cidr_block           = "172.16.0.0/16"
   enable_dns_hostnames = true
+  enable_dns_support = true
   tags = {
     Name = var.namespace
-    By="terraform"
+    By   = "terraform"
   }
 }
 
 
 resource "aws_subnet" "publicA" {
-  vpc_id     = aws_vpc.koffee_vpc.id
-  cidr_block = "172.16.1.0/24"
-  availability_zone = "us-east-1a"
+  vpc_id                  = aws_vpc.koffee_vpc.id
+  cidr_block              = "172.16.1.0/24"
+  availability_zone       = "us-east-1a"
   map_public_ip_on_launch = true
   tags = {
     SubnetName = "${var.namespace}-publicA"
-    For = var.namespace
-    By="terraform"
+    For        = var.namespace
+    By         = "terraform"
   }
 }
 
 resource "aws_subnet" "AppA" {
-  vpc_id = aws_vpc.koffee_vpc.id
-  cidr_block = "172.16.4.0/24"
+  vpc_id            = aws_vpc.koffee_vpc.id
+  cidr_block        = "172.16.4.0/24"
   availability_zone = "us-east-1a"
   tags = {
     SubnetName = "${var.namespace}-AppA"
-    For = var.namespace
-    By="terraform"
+    For        = var.namespace
+    By         = "terraform"
   }
 }
 
 resource "aws_subnet" "DbA" {
-  vpc_id = aws_vpc.koffee_vpc.id
-  cidr_block = "172.16.8.0/24"
+  vpc_id            = aws_vpc.koffee_vpc.id
+  cidr_block        = "172.16.8.0/24"
   availability_zone = "us-east-1a"
   tags = {
     SubnetName = "${var.namespace}-DbA"
-    For = var.namespace
-    By="terraform"
+    For        = var.namespace
+    By         = "terraform"
   }
 }
 
 resource "aws_subnet" "publicB" {
-  vpc_id     = aws_vpc.koffee_vpc.id
-  cidr_block = "172.16.2.0/24"
-  availability_zone = "us-east-1b"
+  vpc_id                  = aws_vpc.koffee_vpc.id
+  cidr_block              = "172.16.2.0/24"
+  availability_zone       = "us-east-1b"
   map_public_ip_on_launch = true
   tags = {
     SubnetName = "${var.namespace}-publicB"
-    For = var.namespace
-    By="terraform"
+    For        = var.namespace
+    By         = "terraform"
   }
 }
 
 resource "aws_subnet" "AppB" {
-  vpc_id = aws_vpc.koffee_vpc.id
-  cidr_block = "172.16.5.0/24"
+  vpc_id            = aws_vpc.koffee_vpc.id
+  cidr_block        = "172.16.5.0/24"
   availability_zone = "us-east-1b"
   tags = {
     SubnetName = "${var.namespace}-AppB"
-    For = var.namespace
-    By="terraform"
+    For        = var.namespace
+    By         = "terraform"
   }
 }
 
 resource "aws_subnet" "DbB" {
-  vpc_id = aws_vpc.koffee_vpc.id
-  cidr_block = "172.16.9.0/24"
+  vpc_id            = aws_vpc.koffee_vpc.id
+  cidr_block        = "172.16.9.0/24"
   availability_zone = "us-east-1b"
   tags = {
     SubnetName = "${var.namespace}-DbB"
-    For = var.namespace
-    By="terraform"
+    For        = var.namespace
+    By         = "terraform"
   }
 }
 
 
 resource "aws_subnet" "publicC" {
-  vpc_id     = aws_vpc.koffee_vpc.id
-  cidr_block = "172.16.3.0/24"
-  availability_zone = "us-east-1c"
+  vpc_id                  = aws_vpc.koffee_vpc.id
+  cidr_block              = "172.16.3.0/24"
+  availability_zone       = "us-east-1c"
   map_public_ip_on_launch = true
   tags = {
     SubnetName = "${var.namespace}-publicC"
-    For = var.namespace
-    By="terraform"
+    For        = var.namespace
+    By         = "terraform"
   }
 }
 
 resource "aws_subnet" "AppC" {
-  vpc_id = aws_vpc.koffee_vpc.id
-  cidr_block = "172.16.6.0/24"
+  vpc_id            = aws_vpc.koffee_vpc.id
+  cidr_block        = "172.16.6.0/24"
   availability_zone = "us-east-1c"
   tags = {
     SubnetName = "${var.namespace}-AppC"
-    For = var.namespace
-    By="terraform"
+    For        = var.namespace
+    By         = "terraform"
   }
 }
 
 resource "aws_subnet" "DbC" {
-  vpc_id = aws_vpc.koffee_vpc.id
-  cidr_block = "172.16.10.0/24"
+  vpc_id            = aws_vpc.koffee_vpc.id
+  cidr_block        = "172.16.10.0/24"
   availability_zone = "us-east-1c"
   tags = {
     SubnetName = "${var.namespace}-DbC"
-    For = var.namespace
-    By="terraform"
+    For        = var.namespace
+    By         = "terraform"
   }
 }
 
 locals {
-  subnets_public = [aws_subnet.publicA.id , aws_subnet.publicB.id , aws_subnet.publicC.id]
-  subnets_private_app = [aws_subnet.AppA,aws_subnet.AppB,aws_subnet.AppC]
-  subnets_private_db = [aws_subnet.DbA , aws_subnet.DbB , aws_subnet.DbC]
+  subnets_public      = [aws_subnet.publicA.id, aws_subnet.publicB.id, aws_subnet.publicC.id]
+  subnets_private_app = [aws_subnet.AppA, aws_subnet.AppB, aws_subnet.AppC]
+  subnets_private_db  = [aws_subnet.DbA, aws_subnet.DbB, aws_subnet.DbC]
 }
 
 resource "aws_internet_gateway" "manning_koffee_MyIGW" {
   vpc_id = aws_vpc.koffee_vpc.id
   tags = {
     Name = "${var.namespace}-MyIGW"
-    For = var.namespace
-    By="terraform"
+    For  = var.namespace
+    By   = "terraform"
   }
 }
 
 resource "aws_eip" "manning_koffee_eip" {
-  count = 3
+  count                = 3
+  vpc                  = true
   network_border_group = "us-east-1"
   tags = {
     Name = "${var.namespace}-eip-${count.index}"
-    For = var.namespace
-    By="terraform"
+    For  = var.namespace
+    By   = "terraform"
   }
   depends_on = [aws_internet_gateway.manning_koffee_MyIGW]
 }
 
 resource "aws_nat_gateway" "manning_koffee_nat_gateway" {
-  count = length(local.subnets_public)
-  subnet_id = local.subnets_public[count.index]
+  count         = length(local.subnets_public)
+  subnet_id     = local.subnets_public[count.index]
   allocation_id = aws_eip.manning_koffee_eip[count.index].id
-  depends_on = [aws_eip.manning_koffee_eip]
+  depends_on    = [aws_eip.manning_koffee_eip]
 }
 
 resource "aws_route_table" "manning_koffee_route_table_public" {
@@ -155,8 +157,8 @@ resource "aws_route_table" "manning_koffee_route_table_public" {
 
   tags = {
     Name = "${var.namespace}-route-table-public-routetable"
-    For = var.namespace
-    By="terraform"
+    For  = var.namespace
+    By   = "terraform"
   }
   depends_on = [aws_internet_gateway.manning_koffee_MyIGW]
 }
@@ -164,14 +166,14 @@ resource "aws_route_table" "manning_koffee_route_table_public" {
 
 
 resource "aws_route_table_association" "manning_koffee_route_association_public" {
-  count = length(local.subnets_public)
+  count          = length(local.subnets_public)
   route_table_id = aws_route_table.manning_koffee_route_table_public.id
-  subnet_id = local.subnets_public[count.index]
+  subnet_id      = local.subnets_public[count.index]
 }
 
 
 resource "aws_route_table" "manning_koffee_route_table_private" {
-  count = length(aws_nat_gateway.manning_koffee_nat_gateway)
+  count  = length(aws_nat_gateway.manning_koffee_nat_gateway)
   vpc_id = aws_vpc.koffee_vpc.id
 
   route {
@@ -181,23 +183,61 @@ resource "aws_route_table" "manning_koffee_route_table_private" {
 
   tags = {
     Name = "${var.namespace}-route-table-private-${count.index}"
-    For = var.namespace
-    By="terraform"
+    For  = var.namespace
+    By   = "terraform"
   }
   depends_on = [aws_nat_gateway.manning_koffee_nat_gateway]
 }
 
 
 resource "aws_route_table_association" "manning_koffee_route_association_private_app" {
-  count = length(aws_route_table.manning_koffee_route_table_private)
+  count          = length(aws_route_table.manning_koffee_route_table_private)
   route_table_id = aws_route_table.manning_koffee_route_table_private[count.index].id
-  subnet_id = local.subnets_private_app[count.index].id
-  depends_on = [aws_route_table.manning_koffee_route_table_private]
+  subnet_id      = local.subnets_private_app[count.index].id
+  depends_on     = [aws_route_table.manning_koffee_route_table_private]
 }
 
 resource "aws_route_table_association" "manning_koffee_route_association_private_db" {
-  count = length(aws_route_table.manning_koffee_route_table_private)
+  count          = length(aws_route_table.manning_koffee_route_table_private)
   route_table_id = aws_route_table.manning_koffee_route_table_private[count.index].id
-  subnet_id = local.subnets_private_db[count.index].id
-  depends_on = [aws_route_table.manning_koffee_route_table_private]
+  subnet_id      = local.subnets_private_db[count.index].id
+  depends_on     = [aws_route_table.manning_koffee_route_table_private]
+}
+
+resource "aws_security_group" "load_balancer_sg" {
+  name   = "load_bal_sg"
+  vpc_id = aws_vpc.koffee_vpc.id
+  ingress {
+    from_port   = 80
+    protocol    = "tcp"
+    to_port     = 80
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  depends_on = [aws_vpc.koffee_vpc]
+}
+
+resource "aws_security_group" "aws_ecs_security_group" {
+  name   = "aws_ecs_security_group"
+  vpc_id = aws_vpc.koffee_vpc.id
+  ingress {
+    from_port   = 5000
+    protocol    = "tcp"
+    to_port     = 5000
+    security_groups = [aws_security_group.load_balancer_sg.id]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  depends_on = [aws_vpc.koffee_vpc]
+
+
 }
